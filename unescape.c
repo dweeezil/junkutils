@@ -36,6 +36,7 @@ main() {
 					case '0': octal = '\000'; break;
 					case '1': octal = '\100'; break;
 					case '2': octal = '\200'; break;
+					case '3': octal = '\300'; break;
 				}
 				state = 2;
 				break;
