@@ -26,7 +26,7 @@ doline(int inbundle, int sep) {
 }
 
 main(int argc, char **argv) {
-	int sep;		// field seperator
+	int sep = ' ';		// field seperator
 	int inbundle = 0;	// nonzero if we're "in" a bundle (i.e. have read one field of a bundle)
 	int lastlinelen = -1;	// length of previous input line
 	int thislinelen;	// length of current input line
