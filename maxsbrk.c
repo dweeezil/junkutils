@@ -4,19 +4,19 @@
 #include <string.h>
 
 main(int argc, char **argv) {
-	int megs, incrmeg, stopmeg;
+	int megs, incrmeg = 1, stopmeg = 0;
 	char *x;
 	intptr_t incr;
 
-	if (argc == 2)
+	switch (argc) {
+	case 2:
 		incrmeg = atoi(argv[1]);
-	else
-		incrmeg = 1;
-
-	if (argc == 3)
+		break;
+	case 3:
+		incrmeg = atoi(argv[1]);
 		stopmeg = atoi(argv[2]);
-	else
-		stopmeg = 0;
+		break;
+	}
 
 	incr = incrmeg * 1024ULL * 1024ULL;
 
