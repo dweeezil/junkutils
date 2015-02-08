@@ -3,6 +3,19 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
+ * maxsbrk - Determine how much memory can be allocated and dirtied.
+ *
+ * Usage: maxsbrk [<chunk>] [<max>]
+ *
+ * The two optional arguments specify, respectively, the size in MiB of
+ * the sbrk() allocations and the maximum amount of memory (in MiB)
+ * allocated.  They are intended to be used to determine the effects
+ * caused by a userland program which allocates large amounts of memory,
+ * which is typically to cause the Linux kernel to engage its various
+ * shrinkers in order that sufficient memory become available.
+ */
+
 main(int argc, char **argv) {
 	int megs, incrmeg = 1, stopmeg = 0;
 	char *x;
