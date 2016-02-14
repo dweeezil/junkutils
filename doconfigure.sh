@@ -32,6 +32,8 @@ DEBUG=
 	--localstatedir=/var \
 	--sysconfdir=/etc \
 	--sharedstatedir=/com \
+	--bindir=/bin \
+	--sbindir=/sbin \
 	--with-linux=$BASE$LINUX \
 	--with-linux-obj=$BASE$LINUX \
 	$DEBUG
