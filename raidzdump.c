@@ -178,9 +178,9 @@ main(int argc, char *argv[])
 
     rzm = vdev_raidz_map_get(size, offset, unit_shift, dcols, nparity);
 
-    printf("cols = %d, firstdatacol = %d\n", rzm->rm_cols, rzm->rm_firstdatacol);
+    printf("cols = %llu, firstdatacol = %llu\n", (unsigned long long)rzm->rm_cols, (unsigned long long)rzm->rm_firstdatacol);
     for (i = 0, cols = &rzm->rm_col[0]; i < rzm->rm_cols; i++, cols++)
-        printf("%d:%lx:%lx\n", cols->rc_devidx, cols->rc_offset, cols->rc_size);
+        printf("%llu:%lx:%lx\n", (unsigned long long)cols->rc_devidx, cols->rc_offset, cols->rc_size);
 
     exit(0);
 }
