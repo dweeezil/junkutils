@@ -14,12 +14,20 @@
  * caused by a userland program which allocates large amounts of memory,
  * which is typically to cause the Linux kernel to engage its various
  * shrinkers in order that sufficient memory become available.
+ *
+ * If invoked as an executable containing the string "hog", continue to
+ * dirty memory until interrupted.
  */
 
+int
 main(int argc, char **argv) {
-	int megs, incrmeg = 1, stopmeg = 0;
-	char *x;
+	int megs, incrmeg = 1, stopmeg = 0, i;
+	char *x, *base = NULL;
 	intptr_t incr;
+	int hog = 0;
+
+	if (strstr(argv[0], "hog") != NULL)
+		hog = 1;
 
 	switch (argc) {
 	case 2:
@@ -39,9 +47,19 @@ main(int argc, char **argv) {
 			printf("sbrk failed\n");
 			break;
 		}
+		if (base == NULL)
+			base = x;
 		memset(x, 0x55, incr);
 		if (stopmeg && megs >= stopmeg)
 			break;
 	}
 	printf("%d MiB (%d GiB)\n", megs, megs / 1024);
+
+	if (hog) {
+		printf("Hog mode enabled, continuing to dirty memory.\n");
+
+		for (;; ++hog)
+			for (i = 0, x = base; i < megs ; ++i, x += incrmeg)
+				memset(x, hog, incr);
+	}
 }
