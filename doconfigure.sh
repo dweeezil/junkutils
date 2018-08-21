@@ -9,16 +9,18 @@
 # Custom
 #BASE=/home/tim/src/linux-
 
-# Redhat
+# CentOS/RHEL/Fedora
 BASE=/usr/src/kernels/
 
 # Kernel version (use uname for current version or force if necessary)
-#LINUX=$(uname -r)
-LINUX=4.3.3-303.fc23.x86_64
+LINUX=$(uname -r)
+#LINUX=4.3.3-303.fc23.x86_64
 
 # Library directory
-#LIB=/lib
+# CentOS/RHEL use /lib64, other may use different locations.
 #LIB=/usr/lib64
+#LIB=/lib
+LIB=/lib64
 
 # Debugging?
 #DEBUG=--enable-debug
@@ -36,7 +38,7 @@ DEBUG=
 	--sbindir=/sbin \
 	--with-linux=$BASE$LINUX \
 	--with-linux-obj=$BASE$LINUX \
+	--libdir=$LIB \
 	$DEBUG
 
-#	--libdir=$LIB
 #	--with-udevdir=$UDEV
