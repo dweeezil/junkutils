@@ -25,8 +25,8 @@ LIB=/lib64
 # Debugging?
 DEBUG=
 #DEBUG=--enable-debug
-#DEBUG=--enable-debug --enable-debug-kmem
-#DEBUG=--enable-debug --enable-debug-kmem --enable-debug-kmem-tracking
+#DEBUG="--enable-debug --enable-debug-kmem"
+#DEBUG="--enable-debug --enable-debug-kmem --enable-debug-kmem-tracking"
 
 # Udev (some systems symlink /lib to /usr/lib so it doesn't matter)
 #UDEV=/usr/lib/udev
