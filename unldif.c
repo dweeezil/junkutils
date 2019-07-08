@@ -3,7 +3,7 @@
 /*
  *  unldif - fold continuation lines (space following a newlin) in an LDIF file
  */
-
+int
 main() {
 	int c;
 	int state = 0;
@@ -36,4 +36,6 @@ main() {
 			break;
 		}
 	}
+	if (state == 1)
+		putchar('\n');
 }
