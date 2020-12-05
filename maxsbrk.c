@@ -6,14 +6,13 @@
 /*
  * maxsbrk - Determine how much memory can be allocated and dirtied.
  *
- * Usage: maxsbrk [<chunk>] [<max>]
+ * Usage: maxsbrk <alloc> [<chunk>]
  *
- * The two optional arguments specify, respectively, the size in MiB of
- * the sbrk() allocations and the maximum amount of memory (in MiB)
- * allocated.  They are intended to be used to determine the effects
- * caused by a userland program which allocates large amounts of memory,
- * which is typically to cause the Linux kernel to engage its various
- * shrinkers in order that sufficient memory become available.
+ * alloc - Amount of memory to allocate in MiB.  If specified as zero (0),
+ * memory is allocated until the attempts to do so fail.
+ *
+ * chunk - Allocate memory in chunks of this size in MiB.  The default chunk
+ * size is 1MiB.
  *
  * If invoked as an executable containing the string "hog", continue to
  * dirty memory until interrupted.
@@ -21,7 +20,7 @@
 
 int
 main(int argc, char **argv) {
-	int megs, incrmeg = 1, stopmeg = 0, i;
+	int megs, chunksize, allocsize, i;
 	char *x, *base = NULL;
 	intptr_t incr;
 	int hog = 0;
@@ -31,17 +30,22 @@ main(int argc, char **argv) {
 
 	switch (argc) {
 	case 2:
-		incrmeg = atoi(argv[1]);
+		allocsize = atoi(argv[1]);
+		chunksize = 1;
 		break;
 	case 3:
-		incrmeg = atoi(argv[1]);
-		stopmeg = atoi(argv[2]);
+		allocsize = atoi(argv[1]);
+		chunksize = atoi(argv[2]);
+		break;
+	default:
+		fprintf(stderr, "usage: %s 0|<alloc MiB> [<chunk MiB>]\n", argv[0]);
+		exit(1);
 		break;
 	}
 
-	incr = incrmeg * 1024ULL * 1024ULL;
+	incr = chunksize * 1024ULL * 1024ULL;
 
-	for (megs = 0 ; ; megs += incrmeg) {
+	for (megs = 0 ; ; megs += chunksize) {
 		x = sbrk(incr);
 		if (x == (void *)-1) {
 			printf("sbrk failed\n");
@@ -50,16 +54,16 @@ main(int argc, char **argv) {
 		if (base == NULL)
 			base = x;
 		memset(x, 0x55, incr);
-		if (stopmeg && megs >= stopmeg)
+		if (allocsize && megs >= allocsize)
 			break;
 	}
-	printf("%d MiB (%d GiB)\n", megs, megs / 1024);
+	printf("%d MiB (%.1f GiB)\n", megs, (double)megs / 1024.0);
 
 	if (hog) {
 		printf("Hog mode enabled, continuing to dirty memory.\n");
 
 		for (;; ++hog)
-			for (i = 0, x = base; i < megs ; ++i, x += incrmeg)
+			for (i = 0, x = base; i < megs ; ++i, x += chunksize)
 				memset(x, hog, incr);
 	}
 }
