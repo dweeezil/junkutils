@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <string.h>
 
+extern void sideffect(void *);
+
 int
 main(int argc, char **argv) {
 	int megs = 1;
@@ -20,6 +22,7 @@ main(int argc, char **argv) {
 	}
 	for (c = 0 ; ; ++c) {
 		memset(buf, c, val);
+		sideffect(buf);
 		putchar("-\\|/"[c % 4]);
 		fflush(stdout);
 		putchar('\b');
